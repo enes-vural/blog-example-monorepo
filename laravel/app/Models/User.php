@@ -29,4 +29,10 @@ class User extends Authenticatable
             'password' => 'hashed',
         ];
     }
+
+    // Bir kullanıcının birden fazla yazısı olabilir
+    public function posts()
+    {
+        return $this->hasMany(Post::class);
+    }
 }
