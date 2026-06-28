@@ -1,0 +1,99 @@
+---
+const PORTAL_URL = 'http://localhost:3000';
+---
+<header class="header">
+  <div class="container">
+    <a href="/" class="logo">
+      <span class="logo-dot"></span>
+      DevBlog
+    </a>
+
+    <nav class="nav">
+      <a href="#hakkinda">Hakkında</a>
+      <a href="#ozellikler">Özellikler</a>
+      <a href={PORTAL_URL} class="btn-outline">Yazıları Oku</a>
+      <a href={`${PORTAL_URL}/login`} class="btn-primary">Giriş Yap</a>
+    </nav>
+  </div>
+</header>
+
+<style>
+  .header {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 100;
+    padding: 1.2rem 0;
+    border-bottom: 1px solid var(--border);
+    backdrop-filter: blur(20px);
+    background: rgba(8, 8, 16, 0.8);
+  }
+
+  .container {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 0 2rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  .logo {
+    font-size: 1.25rem;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    letter-spacing: -0.02em;
+  }
+
+  .logo-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: var(--accent);
+    box-shadow: 0 0 12px var(--accent);
+  }
+
+  .nav {
+    display: flex;
+    align-items: center;
+    gap: 2rem;
+  }
+
+  .nav a {
+    font-size: 0.9rem;
+    color: var(--text-muted);
+    transition: color 0.2s;
+  }
+
+  .nav a:hover {
+    color: var(--text);
+  }
+
+  .btn-outline {
+    padding: 0.5rem 1.2rem;
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    color: var(--text) !important;
+    transition: border-color 0.2s !important;
+  }
+
+  .btn-outline:hover {
+    border-color: var(--accent) !important;
+  }
+
+  .btn-primary {
+    padding: 0.5rem 1.2rem;
+    background: var(--accent);
+    border-radius: var(--radius);
+    color: white !important;
+    font-weight: 500;
+    transition: opacity 0.2s !important;
+  }
+
+  .btn-primary:hover {
+    opacity: 0.85;
+  }
+</style>

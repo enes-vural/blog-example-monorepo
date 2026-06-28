@@ -1,0 +1,16 @@
+# Laravel
+laravel/.env
+laravel/vendor/
+laravel/storage/logs/*.log
+laravel/bootstrap/cache/*.php
+
+# Next.js
+nextjs/.env
+nextjs/.env.local
+nextjs/.next/
+nextjs/node_modules/
+
+# Astro
+astro/.env
+astro/dist/
+astro/node_modules/

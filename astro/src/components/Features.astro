@@ -1,0 +1,108 @@
+---
+const features = [
+  {
+    icon: '⚡',
+    title: 'Hızlı & Modern',
+    desc: 'Astro ile build edilen statik sayfalar, CDN üzerinden anında yüklenir. JavaScript yok, gecikme yok.',
+  },
+  {
+    icon: '🏗️',
+    title: 'Mikroservis Mimari',
+    desc: 'Astro, Next.js ve Laravel üçlüsü ile modern bir servis mimarisi. Her katman bağımsız çalışır.',
+  },
+  {
+    icon: '✍️',
+    title: 'Kolay İçerik Yönetimi',
+    desc: 'Admin panelinden yazı ekle, düzenle, sil. Markdown desteği ile zengin içerik oluştur.',
+  },
+];
+---
+<section class="features" id="ozellikler">
+  <div class="container">
+    <div class="section-header">
+      <h2>Neden <span class="accent">DevBlog?</span></h2>
+      <p>Modern web teknolojileri ile inşa edilmiş, performans odaklı bir platform.</p>
+    </div>
+
+    <div class="grid">
+      {features.map(f => (
+        <div class="card">
+          <div class="icon">{f.icon}</div>
+          <h3>{f.title}</h3>
+          <p>{f.desc}</p>
+        </div>
+      ))}
+    </div>
+  </div>
+</section>
+
+<style>
+  .features {
+    padding: 6rem 0;
+    border-top: 1px solid var(--border);
+  }
+
+  .container {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 0 2rem;
+  }
+
+  .section-header {
+    text-align: center;
+    margin-bottom: 3rem;
+  }
+
+  .section-header h2 {
+    font-size: 2.2rem;
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    margin-bottom: 0.75rem;
+  }
+
+  .section-header p {
+    color: var(--text-muted);
+    font-size: 1rem;
+  }
+
+  .accent {
+    color: var(--accent-light);
+  }
+
+  .grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 1.5rem;
+  }
+
+  .card {
+    padding: 2rem;
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    transition: border-color 0.2s, transform 0.2s;
+  }
+
+  .card:hover {
+    border-color: rgba(124, 107, 255, 0.3);
+    transform: translateY(-2px);
+  }
+
+  .icon {
+    font-size: 2rem;
+    margin-bottom: 1rem;
+  }
+
+  .card h3 {
+    font-size: 1.1rem;
+    font-weight: 600;
+    margin-bottom: 0.75rem;
+    letter-spacing: -0.01em;
+  }
+
+  .card p {
+    color: var(--text-muted);
+    font-size: 0.9rem;
+    line-height: 1.7;
+  }
+</style>
