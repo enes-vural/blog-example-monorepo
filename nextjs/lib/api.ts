@@ -34,7 +34,7 @@ function authHeaders(): Record<string, string> {
 export async function getPosts(): Promise<Post[]> {
   const res = await fetch(`${API_URL}/api/posts`, {
     headers: { Accept: 'application/json' },
-    next: { revalidate: 60 },
+    cache: 'no-store',
   });
 
   if (!res.ok) return [];

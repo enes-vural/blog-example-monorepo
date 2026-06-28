@@ -14,6 +14,7 @@ export default function AdminPage() {
   const [saved, setSaved] = useState(false);
   const [loading, setLoading] = useState(false);
   const [userName, setUserName] = useState('');
+  const [checking, setChecking] = useState(true);
 
   useEffect(() => {
     getMe().then(user => {
@@ -21,6 +22,7 @@ export default function AdminPage() {
         router.push('/login');
       } else {
         setUserName(user.name);
+        setChecking(false);
       }
     });
   }, [router]);
@@ -48,6 +50,8 @@ export default function AdminPage() {
       setLoading(false);
     }
   }
+
+  if (checking) return null;
 
   return (
     <div className="max-w-3xl mx-auto px-6 py-12">
