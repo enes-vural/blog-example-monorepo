@@ -17,35 +17,32 @@ export interface User {
   email: string;
 }
 
-// CSRF cookie'yi al — login öncesi çağrılmalı
-async function getCsrfCookie(): Promise<void> {
-  await fetch(`${API_URL}/sanctum/csrf-cookie`, {
-    credentials: 'include',
-  });
+function getToken(): string {
+  if (typeof window === 'undefined') return '';
+  return localStorage.getItem('auth_token') ?? '';
 }
 
-// Cookie'den XSRF-TOKEN oku
-function getXsrfToken(): string {
-  const match = document.cookie.match(/XSRF-TOKEN=([^;]+)/);
-  return match ? decodeURIComponent(match[1]) : '';
+function authHeaders(): Record<string, string> {
+  const token = getToken();
+  return {
+    Accept: 'application/json',
+    'Content-Type': 'application/json',
+    ...(token ? { Authorization: `Bearer ${token}` } : {}),
+  };
 }
 
-// Tüm yayınlanmış yazıları getir
 export async function getPosts(): Promise<Post[]> {
   const res = await fetch(`${API_URL}/api/posts`, {
-    credentials: 'include',
     headers: { Accept: 'application/json' },
-    next: { revalidate: 60 }, // Next.js cache: 60 saniyede bir yenile
+    next: { revalidate: 60 },
   });
 
   if (!res.ok) return [];
   return res.json();
 }
 
-// Tek yazıyı slug ile getir
 export async function getPost(slug: string): Promise<Post | null> {
   const res = await fetch(`${API_URL}/api/posts/${slug}`, {
-    credentials: 'include',
     headers: { Accept: 'application/json' },
   });
 
@@ -53,19 +50,11 @@ export async function getPost(slug: string): Promise<Post | null> {
   return res.json();
 }
 
-// Giriş yap
-export async function login(email: string, password: string, remember = false) {
-  await getCsrfCookie();
-
+export async function login(email: string, password: string) {
   const res = await fetch(`${API_URL}/api/auth/login`, {
     method: 'POST',
-    credentials: 'include',
-    headers: {
-      'Content-Type': 'application/json',
-      Accept: 'application/json',
-      'X-XSRF-TOKEN': getXsrfToken(),
-    },
-    body: JSON.stringify({ email, password, remember }),
+    headers: { Accept: 'application/json', 'Content-Type': 'application/json' },
+    body: JSON.stringify({ email, password }),
   });
 
   if (!res.ok) {
@@ -73,51 +62,43 @@ export async function login(email: string, password: string, remember = false) {
     throw new Error(err.message ?? 'Giriş başarısız');
   }
 
-  return res.json();
+  const data = await res.json();
+  localStorage.setItem('auth_token', data.token);
+  return data;
 }
 
-// Çıkış yap
 export async function logout() {
-  await getCsrfCookie();
-
-  await fetch(`${API_URL}/api/auth/logout`, {
-    method: 'POST',
-    credentials: 'include',
-    headers: {
-      Accept: 'application/json',
-      'X-XSRF-TOKEN': getXsrfToken(),
-    },
-  });
+  const token = getToken();
+  if (token) {
+    await fetch(`${API_URL}/api/auth/logout`, {
+      method: 'POST',
+      headers: authHeaders(),
+    });
+  }
+  localStorage.removeItem('auth_token');
 }
 
-// Giriş yapılmış kullanıcıyı getir
 export async function getMe(): Promise<User | null> {
+  const token = getToken();
+  if (!token) return null;
+
   const res = await fetch(`${API_URL}/api/auth/me`, {
-    credentials: 'include',
-    headers: { Accept: 'application/json' },
+    headers: authHeaders(),
   });
 
   if (!res.ok) return null;
   return res.json();
 }
 
-// Yeni yazı oluştur
 export async function createPost(data: {
   title: string;
   excerpt: string;
   content: string;
   category?: string;
 }) {
-  await getCsrfCookie();
-
   const res = await fetch(`${API_URL}/api/posts`, {
     method: 'POST',
-    credentials: 'include',
-    headers: {
-      'Content-Type': 'application/json',
-      Accept: 'application/json',
-      'X-XSRF-TOKEN': getXsrfToken(),
-    },
+    headers: authHeaders(),
     body: JSON.stringify(data),
   });
 

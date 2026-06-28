@@ -17,8 +17,7 @@ export default function LoginPage() {
     setLoading(true);
 
     try {
-      const data = await login(email, password);
-      localStorage.setItem('token', data.token);
+      await login(email, password);
       router.push('/admin');
     } catch (err: unknown) {
       setError(err instanceof Error ? err.message : 'Bir hata oluştu');
