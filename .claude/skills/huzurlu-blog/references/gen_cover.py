@@ -1,7 +1,9 @@
 #!/usr/bin/env python3
 # Huzurlu Yaşam branded blog cover generator (PIL).
-# Run with: /opt/homebrew/bin/python3 gen_cover.py
+# Run with: python3 gen_cover.py (macOS/Linux) or python gen_cover.py (Windows)
 # Edit EYEBROW / HEADLINE_LINES / SUBLINE / SLUG per post.
+import os
+import platform
 from PIL import Image, ImageDraw, ImageFont
 import random
 
@@ -9,15 +11,29 @@ SLUG = "ORNEK-SLUG"                       # -> public/blog/<SLUG>.jpg
 EYEBROW = "YÖNETİM · 634 KMK · 2026"       # eyebrow pill text (uppercase)
 HEADLINE_LINES = ["Başlık Satır 1", "Başlık Satır 2", "Başlık Satır 3"]
 SUBLINE = "Kısa alt açıklama · anahtar fayda"
-OUTDIR = "/Users/sakastudio/development/projects/sinan/hedefim/hazalkenthuzurluyasam/web/public/blog"
+
+# Mac project checkout is the canonical output dir; falls back to a local
+# ./blog-covers dir (created if needed) on machines that don't have it
+# (e.g. Windows) so the script still runs standalone for previewing covers.
+_MAC_OUTDIR = "/Users/sakastudio/development/projects/sinan/hedefim/hazalkenthuzurluyasam/web/public/blog"
+OUTDIR = _MAC_OUTDIR if os.path.isdir(_MAC_OUTDIR) else os.path.join(os.path.dirname(__file__), "blog-covers")
+os.makedirs(OUTDIR, exist_ok=True)
 
 W, H = 1200, 675
 BG = (38, 33, 30)          # #26211e
 ORANGE = (253, 136, 48)    # #fd8830
 INK = (245, 240, 235)
 MUTED = (170, 160, 150)
-FB = "/System/Library/Fonts/Supplemental/Arial Bold.ttf"
-FR = "/System/Library/Fonts/Supplemental/Arial.ttf"
+
+if platform.system() == "Windows":
+    FB = "C:/Windows/Fonts/arialbd.ttf"
+    FR = "C:/Windows/Fonts/arial.ttf"
+elif platform.system() == "Darwin":
+    FB = "/System/Library/Fonts/Supplemental/Arial Bold.ttf"
+    FR = "/System/Library/Fonts/Supplemental/Arial.ttf"
+else:  # Linux fallback (DejaVu ships with most distros)
+    FB = "/usr/share/fonts/truetype/dejavu/DejaVuSans-Bold.ttf"
+    FR = "/usr/share/fonts/truetype/dejavu/DejaVuSans.ttf"
 
 img = Image.new("RGB", (W, H), BG)
 d = ImageDraw.Draw(img)

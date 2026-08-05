@@ -112,12 +112,17 @@ SVG'nin gerisi DÜZ METİN olarak render olur ("görsel olmamış" hatası). Kur
 - **Branded PIL kapak** (heroImage + OG kartı). 1200×675 JPEG, `public/blog/<slug>.jpg`.
   Motif: apartman skyline + eyebrow pill (ör. "YÖNETİM · 634 KMK · 2026") + 3-satır
   başlık + wordmark "Huzurlu Yaşam huzurluyasam.net". Palet #fd8830/#26211e.
-  PIL python = `/opt/homebrew/bin/python3` (import PIL). Şablon: `references/gen_cover.py`.
+  PIL python: macOS `/opt/homebrew/bin/python3`, Windows `python` (venv/global — Pillow
+  installed via `pip install Pillow`). Şablon: `references/gen_cover.py` (OS'a göre font
+  yolunu ve OUTDIR'ı otomatik seçer: macOS Arial Supplemental, Windows `C:/Windows/Fonts`,
+  Linux DejaVu; Mac proje checkout'u yoksa çıktı `references/blog-covers/`'a düşer).
   Not: kapak ≈ 0 direkt Google lift; değeri OG/sosyal + cila. Asıl ağırlık SVG'de.
 - **İndirilebilir asset = backlink magnet** (kanıtlı: çizelge CSV, ihtarname/makbuz/
   karar örneği Word+PDF). Kullanıcıya gerçek değer + link mıknatısı + ranking sayfası.
-  Word/PDF üreten python (docx+reportlab) = `~/.claude/tools/scrapling/.venv/bin/python`.
-  PDF Türkçe font: `/System/Library/Fonts/Supplemental/Arial*.ttf`. **PDF başlıkları
+  Word/PDF üreten python (docx+reportlab): macOS `~/.claude/tools/scrapling/.venv/bin/python`,
+  Windows `python` (global — `pip install python-docx reportlab`).
+  PDF Türkçe font: macOS `/System/Library/Fonts/Supplemental/Arial*.ttf`, Windows
+  `C:/Windows/Fonts/arial.ttf` + `arialbd.ttf`. **PDF başlıkları
   SİYAH** (owner tercihi, turuncu değil). İndirme butonları gövdeye:
   ```html
   <div class="flex flex-wrap gap-3 my-6">
